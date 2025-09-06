@@ -156,205 +156,205 @@ SDD 方法論透過兩個強大的 Claude 指令得到顯著增強，這些指�
 
 這些指令的真正力量不僅在於自動化，還在於範本如何引導 LLM 行為朝向更高品質的規格。範本作為複雜的提示，以有效的方式約束 LLM 的輸出：
 
-#### 1. **Preventing Premature Implementation Details**
+#### 1. **防止過早的實作細節**
 
-The feature specification template explicitly instructs:
-
-```
-- ✅ Focus on WHAT users need and WHY
-- ❌ Avoid HOW to implement (no tech stack, APIs, code structure)
-```
-
-This constraint forces the LLM to maintain proper abstraction levels. When an LLM might naturally jump to "implement using React with Redux," the template keeps it focused on "users need real-time updates of their data." This separation ensures specifications remain stable even as implementation technologies change.
-
-#### 2. **Forcing Explicit Uncertainty Markers**
-
-Both templates mandate the use of `[NEEDS CLARIFICATION]` markers:
+功能規格範本明確指示：
 
 ```
-When creating this spec from a user prompt:
-1. **Mark all ambiguities**: Use [NEEDS CLARIFICATION: specific question]
-2. **Don't guess**: If the prompt doesn't specify something, mark it
+- ✅ 專注於使用者需要什麼以及為什麼
+- ❌ 避免如何實作（無技術堆疊、API、程式碼結構）
 ```
 
-This prevents the common LLM behavior of making plausible but potentially incorrect assumptions. Instead of guessing that a "login system" uses email/password authentication, the LLM must mark it as `[NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]`.
+這個限制強制 LLM 維持適當的抽象層級。當 LLM 可能自然地跳到「使用 React 和 Redux 實作」時，範本讓它專注於「使用者需要即時更新他們的資料」。這種分離確保規格即使在實作技術變更時也保持穩定。
 
-#### 3. **Structured Thinking Through Checklists**
+#### 2. **強制明確的不確定性標記**
 
-The templates include comprehensive checklists that act as "unit tests" for the specification:
-
-```
-### Requirement Completeness
-- [ ] No [NEEDS CLARIFICATION] markers remain
-- [ ] Requirements are testable and unambiguous
-- [ ] Success criteria are measurable
-```
-
-These checklists force the LLM to self-review its output systematically, catching gaps that might otherwise slip through. It's like giving the LLM a quality assurance framework.
-
-#### 4. **Constitutional Compliance Through Gates**
-
-The implementation plan template enforces architectural principles through phase gates:
+兩個範本都要求使用 `[NEEDS CLARIFICATION]` 標記：
 
 ```
-### Phase -1: Pre-Implementation Gates
-#### Simplicity Gate (Article VII)
-- [ ] Using ≤3 projects?
-- [ ] No future-proofing?
-#### Anti-Abstraction Gate (Article VIII)
-- [ ] Using framework directly?
-- [ ] Single model representation?
+從使用者提示建立此規格時：
+1. **標記所有模糊之處**：使用 [NEEDS CLARIFICATION: 具體問題]
+2. **不要猜測**：如果提示沒有指定某些內容，請標記它
 ```
 
-These gates prevent over-engineering by making the LLM explicitly justify any complexity. If a gate fails, the LLM must document why in the "Complexity Tracking" section, creating accountability for architectural decisions.
+這防止了 LLM 做出看似合理但可能不正確假設的常見行為。LLM 不會猜測「登入系統」使用電子郵件/密碼驗證，而必須將其標記為 `[NEEDS CLARIFICATION: 未指定驗證方法 - 電子郵件/密碼、SSO、OAuth？]`。
 
-#### 5. **Hierarchical Detail Management**
+#### 3. **透過檢查清單進行結構化思考**
 
-The templates enforce proper information architecture:
-
-```
-**IMPORTANT**: This implementation plan should remain high-level and readable.
-Any code samples, detailed algorithms, or extensive technical specifications
-must be placed in the appropriate `implementation-details/` file
-```
-
-This prevents the common problem of specifications becoming unreadable code dumps. The LLM learns to maintain appropriate detail levels, extracting complexity to separate files while keeping the main document navigable.
-
-#### 6. **Test-First Thinking**
-
-The implementation template enforces test-first development:
+範本包含全面的檢查清單，作為規格的「單元測試」：
 
 ```
-### File Creation Order
-1. Create `contracts/` with API specifications
-2. Create test files in order: contract → integration → e2e → unit
-3. Create source files to make tests pass
+### 需求完整性
+- [ ] 不再有 [NEEDS CLARIFICATION] 標記
+- [ ] 需求可測試且明確
+- [ ] 成功標準可衡量
 ```
 
-This ordering constraint ensures the LLM thinks about testability and contracts before implementation, leading to more robust and verifiable specifications.
+這些檢查清單強制 LLM 系統性地自我審查其輸出，捕捉可能遺漏的差距。這就像為 LLM 提供品質保證框架。
 
-#### 7. **Preventing Speculative Features**
+#### 4. **透過閘門進行憲法合規**
 
-Templates explicitly discourage speculation:
-
-```
-- [ ] No speculative or "might need" features
-- [ ] All phases have clear prerequisites and deliverables
-```
-
-This stops the LLM from adding "nice to have" features that complicate implementation. Every feature must trace back to a concrete user story with clear acceptance criteria.
-
-### The Compound Effect
-
-These constraints work together to produce specifications that are:
-
-- **Complete**: Checklists ensure nothing is forgotten
-- **Unambiguous**: Forced clarification markers highlight uncertainties
-- **Testable**: Test-first thinking baked into the process
-- **Maintainable**: Proper abstraction levels and information hierarchy
-- **Implementable**: Clear phases with concrete deliverables
-
-The templates transform the LLM from a creative writer into a disciplined specification engineer, channeling its capabilities toward producing consistently high-quality, executable specifications that truly drive development.
-
-## The Constitutional Foundation: Enforcing Architectural Discipline
-
-At the heart of SDD lies a constitution—a set of immutable principles that govern how specifications become code. The constitution (`base/memory/constitution.md`) acts as the architectural DNA of the system, ensuring that every generated implementation maintains consistency, simplicity, and quality.
-
-### The Nine Articles of Development
-
-The constitution defines nine articles that shape every aspect of the development process:
-
-#### Article I: Library-First Principle
-
-Every feature must begin as a standalone library—no exceptions. This forces modular design from the start:
+實作計畫範本透過階段閘門強制執行架構原則：
 
 ```
-Every feature in Specify MUST begin its existence as a standalone library.
-No feature shall be implemented directly within application code without
-first being abstracted into a reusable library component.
+### 階段 -1：實作前閘門
+#### 簡潔性閘門（第七條）
+- [ ] 使用 ≤3 個專案？
+- [ ] 沒有未來防護？
+#### 反抽象閘門（第八條）
+- [ ] 直接使用框架？
+- [ ] 單一模型表示？
 ```
 
-This principle ensures that specifications generate modular, reusable code rather than monolithic applications. When the LLM generates an implementation plan, it must structure features as libraries with clear boundaries and minimal dependencies.
+這些閘門透過讓 LLM 明確證明任何複雜性的合理性來防止過度工程化。如果閘門失敗，LLM 必須在「複雜度追蹤」章節中記錄原因，為架構決策建立問責制。
 
-#### Article II: CLI Interface Mandate
+#### 5. **階層式細節管理**
 
-Every library must expose its functionality through a command-line interface:
-
-```
-All CLI interfaces MUST:
-- Accept text as input (via stdin, arguments, or files)
-- Produce text as output (via stdout)
-- Support JSON format for structured data exchange
-```
-
-This enforces observability and testability. The LLM cannot hide functionality inside opaque classes—everything must be accessible and verifiable through text-based interfaces.
-
-#### Article III: Test-First Imperative
-
-The most transformative article—no code before tests:
+範本強制執行適當的資訊架構：
 
 ```
-This is NON-NEGOTIABLE: All implementation MUST follow strict Test-Driven Development.
-No implementation code shall be written before:
-1. Unit tests are written
-2. Tests are validated and approved by the user
-3. Tests are confirmed to FAIL (Red phase)
+**重要**：此實作計畫應保持高層次且可讀。
+任何程式碼範例、詳細演算法或廣泛的技術規格
+都必須放置在適當的 `implementation-details/` 檔案中
 ```
 
-This completely inverts traditional AI code generation. Instead of generating code and hoping it works, the LLM must first generate comprehensive tests that define behavior, get them approved, and only then generate implementation.
+這防止了規格變成不可讀程式碼堆積的常見問題。LLM 學會維持適當的細節層級，將複雜性提取到單獨的檔案中，同時保持主文件的可導覽性。
 
-#### Articles VII & VIII: Simplicity and Anti-Abstraction
+#### 6. **測試優先思維**
 
-These paired articles combat over-engineering:
-
-```
-Section 7.3: Minimal Project Structure
-- Maximum 3 projects for initial implementation
-- Additional projects require documented justification
-
-Section 8.1: Framework Trust
-- Use framework features directly rather than wrapping them
-```
-
-When an LLM might naturally create elaborate abstractions, these articles force it to justify every layer of complexity. The implementation plan template's "Phase -1 Gates" directly enforce these principles.
-
-#### Article IX: Integration-First Testing
-
-Prioritizes real-world testing over isolated unit tests:
+實作範本強制執行測試優先開發：
 
 ```
-Tests MUST use realistic environments:
-- Prefer real databases over mocks
-- Use actual service instances over stubs
-- Contract tests mandatory before implementation
+### 檔案建立順序
+1. 建立包含 API 規格的 `contracts/`
+2. 按順序建立測試檔案：合約 → 整合 → e2e → 單元
+3. 建立原始檔案以使測試通過
 ```
 
-This ensures generated code works in practice, not just in theory.
+這個順序限制確保 LLM 在實作之前思考可測試性和合約，導致更強健且可驗證的規格。
 
-### Constitutional Enforcement Through Templates
+#### 7. **防止投機性功能**
 
-The implementation plan template operationalizes these articles through concrete checkpoints:
+範本明確阻止投機行為：
+
+```
+- [ ] 沒有投機性或「可能需要」的功能
+- [ ] 所有階段都有清楚的前置條件和交付項目
+```
+
+這阻止 LLM 新增使實作複雜化的「最好有」功能。每個功能都必須追溯到具有清楚接受標準的具體使用者故事。
+
+### 複合效應
+
+這些限制共同作用產生以下規格：
+
+- **完整**：檢查清單確保沒有遺忘任何事項
+- **明確**：強制澄清標記突出不確定性
+- **可測試**：測試優先思維融入流程
+- **可維護**：適當的抽象層級和資訊階層
+- **可實作**：具有具體交付項目的清楚階段
+
+範本將 LLM 從創意寫作者轉換為有紀律的規格工程師，將其能力導向產生一致的高品質、可執行規格，真正驅動開發。
+
+## 憲法基礎：強制執行架構紀律
+
+SDD 的核心是憲法——一套不可變的原則，管理規格如何變成程式碼。憲法（`base/memory/constitution.md`）作為系統的架構 DNA，確保每個生成的實作都維持一致性、簡潔性和品質。
+
+### 開發的九條條文
+
+憲法定義了九條條文，塑造開發流程的每個方面：
+
+#### 第一條：函式庫優先原則
+
+每個功能都必須從獨立函式庫開始——沒有例外。這從一開始就強制模組化設計：
+
+```
+Specify 中的每個功能都必須以獨立函式庫的形式開始存在。
+任何功能都不得直接在應用程式程式碼中實作，
+必須先抽象為可重用的函式庫元件。
+```
+
+這個原則確保規格產生模組化、可重用的程式碼，而非單體應用程式。當 LLM 產生實作計畫時，它必須將功能結構化為具有清楚邊界和最小相依性的函式庫。
+
+#### 第二條：CLI 介面要求
+
+每個函式庫都必須透過命令列介面公開其功能：
+
+```
+所有 CLI 介面都必須：
+- 接受文字作為輸入（透過 stdin、參數或檔案）
+- 產生文字作為輸出（透過 stdout）
+- 支援 JSON 格式進行結構化資料交換
+```
+
+這強制執行可觀測性和可測試性。LLM 不能將功能隱藏在不透明的類別中——一切都必須透過基於文字的介面可存取和可驗證。
+
+#### 第三條：測試優先要求
+
+最具變革性的條文——測試之前不寫程式碼：
+
+```
+這是不可協商的：所有實作都必須遵循嚴格的測試驅動開發。
+在以下條件滿足之前，不得撰寫任何實作程式碼：
+1. 撰寫單元測試
+2. 測試經過驗證並獲得使用者批准
+3. 確認測試失敗（紅色階段）
+```
+
+這完全顛覆了傳統的 AI 程式碼生成。LLM 不是生成程式碼並希望它能運作，而是必須首先生成定義行為的全面測試，獲得批准，然後才生成實作。
+
+#### 第七條和第八條：簡潔性和反抽象
+
+這兩條配對的條文對抗過度工程化：
+
+```
+第 7.3 節：最小專案結構
+- 初始實作最多 3 個專案
+- 額外專案需要記錄的合理性證明
+
+第 8.1 節：框架信任
+- 直接使用框架功能而非包裝它們
+```
+
+當 LLM 可能自然地建立複雜的抽象時，這些條文強制它證明每一層複雜性的合理性。實作計畫範本的「階段 -1 閘門」直接強制執行這些原則。
+
+#### 第九條：整合優先測試
+
+優先考慮真實世界測試而非孤立的單元測試：
+
+```
+測試必須使用真實環境：
+- 偏好真實資料庫而非模擬
+- 使用實際服務實例而非存根
+- 實作前必須進行合約測試
+```
+
+這確保生成的程式碼在實務中運作，而不僅僅是理論上。
+
+### 透過範本強制執行憲法
+
+實作計畫範本透過具體檢查點將這些條文操作化：
 
 ```markdown
-### Phase -1: Pre-Implementation Gates
+### 階段 -1：實作前閘門
 
-#### Simplicity Gate (Article VII)
+#### 簡潔性閘門（第七條）
 
-- [ ] Using ≤3 projects?
-- [ ] No future-proofing?
+- [ ] 使用 ≤3 個專案？
+- [ ] 沒有未來防護？
 
-#### Anti-Abstraction Gate (Article VIII)
+#### 反抽象閘門（第八條）
 
-- [ ] Using framework directly?
-- [ ] Single model representation?
+- [ ] 直接使用框架？
+- [ ] 單一模型表示？
 
-#### Integration-First Gate (Article IX)
+#### 整合優先閘門（第九條）
 
-- [ ] Contracts defined?
-- [ ] Contract tests written?
+- [ ] 合約已定義？
+- [ ] 合約測試已撰寫？
 ```
 
-These gates act as compile-time checks for architectural principles. The LLM cannot proceed without either passing the gates or documenting justified exceptions in the "Complexity Tracking" section.
+這些閘門作為架構原則的編譯時檢查。LLM 不能在不通過閘門或在「複雜度追蹤」章節中記錄合理例外的情況下繼續。
 
 ### 不可變原則的力量
 
@@ -365,30 +365,30 @@ These gates act as compile-time checks for architectural principles. The LLM can
 3. **架構完整性**：每個功能都強化而非破壞系統設計
 4. **品質保證**：測試優先、函式庫優先和簡潔原則確保可維護的程式碼
 
-### Constitutional Evolution
+### 憲法演進
 
-While principles are immutable, their application can evolve:
+雖然原則是不可變的，但它們的應用可以演進：
 
 ```
-Section 4.2: Amendment Process
-Modifications to this constitution require:
-- Explicit documentation of the rationale for change
-- Review and approval by project maintainers
-- Backwards compatibility assessment
+第 4.2 節：修正流程
+對此憲法的修改需要：
+- 明確記錄變更理由
+- 專案維護者的審查和批准
+- 向後相容性評估
 ```
 
-This allows the methodology to learn and improve while maintaining stability. The constitution shows its own evolution with dated amendments, demonstrating how principles can be refined based on real-world experience.
+這允許方法論在保持穩定性的同時學習和改進。憲法透過標註日期的修正案顯示其自身的演進，展示如何基於真實世界經驗精煉原則。
 
-### Beyond Rules: A Development Philosophy
+### 超越規則：開發哲學
 
-The constitution isn't just a rulebook—it's a philosophy that shapes how LLMs think about code generation:
+憲法不僅僅是規則手冊——它是塑造 LLM 如何思考程式碼生成的哲學：
 
-- **Observability Over Opacity**: Everything must be inspectable through CLI interfaces
-- **Simplicity Over Cleverness**: Start simple, add complexity only when proven necessary
-- **Integration Over Isolation**: Test in real environments, not artificial ones
-- **Modularity Over Monoliths**: Every feature is a library with clear boundaries
+- **可觀測性勝過不透明性**：一切都必須透過 CLI 介面可檢查
+- **簡潔性勝過聰明性**：從簡單開始，只有在證明必要時才增加複雜性
+- **整合勝過孤立**：在真實環境中測試，而非人工環境
+- **模組化勝過單體**：每個功能都是具有清楚邊界的函式庫
 
-By embedding these principles into the specification and planning process, SDD ensures that generated code isn't just functional—it's maintainable, testable, and architecturally sound. The constitution transforms AI from a code generator into an architectural partner that respects and reinforces system design principles.
+透過將這些原則嵌入規格和規劃流程中，SDD 確保生成的程式碼不僅功能正常——還可維護、可測試且架構健全。憲法將 AI 從程式碼生成器轉換為尊重並強化系統設計原則的架構夥伴。
 
 ## 轉換
 
