@@ -1,14 +1,14 @@
-# Support 
+# 支援
 
-## How to file issues and get help
+## 如何提交議題和取得協助
 
-This project uses GitHub issues to track bugs and feature requests. Please search the existing issues before filing new issues to avoid duplicates. For new issues, file your bug or feature request as a new issue.
+此專案使用 GitHub 議題來追蹤錯誤和功能請求。在提交新議題之前，請搜尋現有議題以避免重複。對於新議題，請將你的錯誤或功能請求作為新議題提交。
 
-For help or questions about using this project, please:
+如需使用此專案的協助或問題，請：
 
-- Open a [GitHub issue](https://github.com/github/spec-kit/issues/new) for bug reports, feature requests, or questions about the Spec-Driven Development methodology
-- Check the [comprehensive guide](./spec-driven.md) for detailed documentation on the Spec-Driven Development process
-- Review the [README](./README.md) for getting started instructions and troubleshooting tips
+- 開啟 [GitHub 議題](https://github.com/github/spec-kit/issues/new) 來回報錯誤、功能請求，或關於規格驅動開發方法論的問題
+- 查看 [完整指南](./spec-driven.md) 以取得規格驅動開發流程的詳細文件
+- 檢閱 [README](./README.md) 以取得入門說明和疑難排解提示
 
 ## Project Status
 
