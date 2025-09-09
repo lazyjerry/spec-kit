@@ -10,15 +10,15 @@
 # ]
 # ///
 """
-Specify CLI - Setup tool for Specify projects
+Specify CLI - Specify 專案的設定工具
 
-Usage:
-    uvx specify-cli.py init <project-name>
+用法：
+    uvx specify-cli.py init <專案名稱>
     uvx specify-cli.py init --here
 
-Or install globally:
+或全域安裝：
     uv tool install --from specify-cli.py specify-cli
-    specify init <project-name>
+    specify init <專案名稱>
     specify init --here
 """
 
@@ -64,10 +64,10 @@ BANNER = """
 ╚══════╝╚═╝     ╚══════╝ ╚═════╝╚═╝╚═╝        ╚═╝   
 """
 
-TAGLINE = "Spec-Driven Development Toolkit"
+TAGLINE = "規格驅動開發工具包"
 class StepTracker:
-    """Track and render hierarchical steps without emojis, similar to Claude Code tree output.
-    Supports live auto-refresh via an attached refresh callback.
+    """追蹤並渲染階層式步驟，不使用表情符號，類似 Claude Code 樹狀輸出。
+    透過附加的重新整理回呼支援即時自動重新整理。
     """
     def __init__(self, title: str):
         self.title = title
@@ -160,7 +160,7 @@ MINI_BANNER = """
 """
 
 def get_key():
-    """Get a single keypress in a cross-platform way using readchar."""
+    """使用 readchar 以跨平台方式取得單一按鍵。"""
     key = readchar.readkey()
     
     # Arrow keys
@@ -185,17 +185,17 @@ def get_key():
 
 
 
-def select_with_arrows(options: dict, prompt_text: str = "Select an option", default_key: str = None) -> str:
+def select_with_arrows(options: dict, prompt_text: str = "選擇一個選項", default_key: str = None) -> str:
     """
-    Interactive selection using arrow keys with Rich Live display.
+    使用方向鍵與 Rich Live 顯示進行互動式選擇。
     
     Args:
-        options: Dict with keys as option keys and values as descriptions
-        prompt_text: Text to show above the options
-        default_key: Default option key to start with
+        options: 以選項鍵為鍵、描述為值的字典
+        prompt_text: 在選項上方顯示的文字
+        default_key: 預設開始的選項鍵
         
     Returns:
-        Selected option key
+        選擇的選項鍵
     """
     option_keys = list(options.keys())
     if default_key and default_key in option_keys:
@@ -218,7 +218,7 @@ def select_with_arrows(options: dict, prompt_text: str = "Select an option", def
                 table.add_row(" ", f"[white]{key}: {options[key]}[/white]")
         
         table.add_row("", "")
-        table.add_row("", "[dim]Use ↑/↓ to navigate, Enter to select, Esc to cancel[/dim]")
+        table.add_row("", "[dim]使用 ↑/↓ 導航，Enter 選擇，Esc 取消[/dim]")
         
         return Panel(
             table,
@@ -243,19 +243,19 @@ def select_with_arrows(options: dict, prompt_text: str = "Select an option", def
                         selected_key = option_keys[selected_index]
                         break
                     elif key == 'escape':
-                        console.print("\n[yellow]Selection cancelled[/yellow]")
+                        console.print("\n[yellow]選擇已取消[/yellow]")
                         raise typer.Exit(1)
                     
                     live.update(create_selection_panel(), refresh=True)
 
                 except KeyboardInterrupt:
-                    console.print("\n[yellow]Selection cancelled[/yellow]")
+                    console.print("\n[yellow]選擇已取消[/yellow]")
                     raise typer.Exit(1)
 
     run_selection_loop()
 
     if selected_key is None:
-        console.print("\n[red]Selection failed.[/red]")
+        console.print("\n[red]選擇失敗。[/red]")
         raise typer.Exit(1)
 
     # Suppress explicit selection print; tracker / later logic will report consolidated status
@@ -267,7 +267,7 @@ console = Console()
 
 
 class BannerGroup(TyperGroup):
-    """Custom group that shows banner before help."""
+    """在說明前顯示橫幅的自訂群組。"""
     
     def format_help(self, ctx, formatter):
         # Show banner before help
@@ -277,7 +277,7 @@ class BannerGroup(TyperGroup):
 
 app = typer.Typer(
     name="specify",
-    help="Setup tool for Specify spec-driven development projects",
+    help="Specify 規格驅動開發專案的設定工具",
     add_completion=False,
     invoke_without_command=True,
     cls=BannerGroup,
@@ -285,7 +285,7 @@ app = typer.Typer(
 
 
 def show_banner():
-    """Display the ASCII art banner."""
+    """顯示 ASCII 藝術橫幅。"""
     # Create gradient effect with different colors
     banner_lines = BANNER.strip().split('\n')
     colors = ["bright_blue", "blue", "cyan", "bright_cyan", "white", "bright_white"]
@@ -302,17 +302,17 @@ def show_banner():
 
 @app.callback()
 def callback(ctx: typer.Context):
-    """Show banner when no subcommand is provided."""
+    """未提供子指令時顯示橫幅。"""
     # Show banner only when no subcommand and no help flag
     # (help is handled by BannerGroup)
     if ctx.invoked_subcommand is None and "--help" not in sys.argv and "-h" not in sys.argv:
         show_banner()
-        console.print(Align.center("[dim]Run 'specify --help' for usage information[/dim]"))
+        console.print(Align.center("[dim]執行 'specify --help' 取得使用資訊[/dim]"))
         console.print()
 
 
 def run_command(cmd: list[str], check_return: bool = True, capture: bool = False, shell: bool = False) -> Optional[str]:
-    """Run a shell command and optionally capture output."""
+    """執行 shell 指令並選擇性擷取輸出。"""
     try:
         if capture:
             result = subprocess.run(cmd, check=check_return, capture_output=True, text=True, shell=shell)
@@ -322,21 +322,21 @@ def run_command(cmd: list[str], check_return: bool = True, capture: bool = False
             return None
     except subprocess.CalledProcessError as e:
         if check_return:
-            console.print(f"[red]Error running command:[/red] {' '.join(cmd)}")
-            console.print(f"[red]Exit code:[/red] {e.returncode}")
+            console.print(f"[red]執行指令時發生錯誤：[/red] {' '.join(cmd)}")
+            console.print(f"[red]結束代碼：[/red] {e.returncode}")
             if hasattr(e, 'stderr') and e.stderr:
-                console.print(f"[red]Error output:[/red] {e.stderr}")
+                console.print(f"[red]錯誤輸出：[/red] {e.stderr}")
             raise
         return None
 
 
 def check_tool(tool: str, install_hint: str) -> bool:
-    """Check if a tool is installed."""
+    """檢查工具是否已安裝。"""
     if shutil.which(tool):
         return True
     else:
-        console.print(f"[yellow]⚠️  {tool} not found[/yellow]")
-        console.print(f"   Install with: [cyan]{install_hint}[/cyan]")
+        console.print(f"[yellow]⚠️  找不到 {tool}[/yellow]")
+        console.print(f"   安裝方式：[cyan]{install_hint}[/cyan]")
         return False
 
 
@@ -644,17 +644,17 @@ def init(
     here: bool = typer.Option(False, "--here", help="Initialize project in the current directory instead of creating a new one"),
 ):
     """
-    Initialize a new Specify project from the latest template.
+    從最新範本初始化新的 Specify 專案。
     
-    This command will:
-    1. Check that required tools are installed (git is optional)
-    2. Let you choose your AI assistant (Claude Code, Gemini CLI, or GitHub Copilot)
-    3. Download the appropriate template from GitHub
-    4. Extract the template to a new project directory or current directory
-    5. Initialize a fresh git repository (if not --no-git and no existing repo)
-    6. Optionally set up AI assistant commands
+    此指令將會：
+    1. 檢查必要工具是否已安裝（git 為選用）
+    2. 讓你選擇 AI 助理（Claude Code、Gemini CLI 或 GitHub Copilot）
+    3. 從 GitHub 下載適當的範本
+    4. 將範本解壓縮到新專案目錄或目前目錄
+    5. 初始化新的 git 儲存庫（如果未使用 --no-git 且無現有儲存庫）
+    6. 選擇性設定 AI 助理指令
     
-    Examples:
+    範例：
         specify init my-project
         specify init my-project --ai claude
         specify init my-project --ai gemini
@@ -668,11 +668,11 @@ def init(
     
     # Validate arguments
     if here and project_name:
-        console.print("[red]Error:[/red] Cannot specify both project name and --here flag")
+        console.print("[red]錯誤：[/red] 不能同時指定專案名稱和 --here 旗標")
         raise typer.Exit(1)
     
     if not here and not project_name:
-        console.print("[red]Error:[/red] Must specify either a project name or use --here flag")
+        console.print("[red]錯誤：[/red] 必須指定專案名稱或使用 --here 旗標")
         raise typer.Exit(1)
     
     # Determine project directory
@@ -683,24 +683,24 @@ def init(
         # Check if current directory has any files
         existing_items = list(project_path.iterdir())
         if existing_items:
-            console.print(f"[yellow]Warning:[/yellow] Current directory is not empty ({len(existing_items)} items)")
-            console.print("[yellow]Template files will be merged with existing content and may overwrite existing files[/yellow]")
+            console.print(f"[yellow]警告：[/yellow] 目前目錄不是空的（{len(existing_items)} 個項目）")
+            console.print("[yellow]範本檔案將與現有內容合併，可能會覆寫現有檔案[/yellow]")
             
-            # Ask for confirmation
-            response = typer.confirm("Do you want to continue?")
+            # 詢問確認
+            response = typer.confirm("你想要繼續嗎？")
             if not response:
-                console.print("[yellow]Operation cancelled[/yellow]")
+                console.print("[yellow]操作已取消[/yellow]")
                 raise typer.Exit(0)
     else:
         project_path = Path(project_name).resolve()
         # Check if project directory already exists
         if project_path.exists():
-            console.print(f"[red]Error:[/red] Directory '{project_name}' already exists")
+            console.print(f"[red]錯誤：[/red] 目錄 '{project_name}' 已存在")
             raise typer.Exit(1)
     
     console.print(Panel.fit(
-        "[bold cyan]Specify Project Setup[/bold cyan]\n"
-        f"{'Initializing in current directory:' if here else 'Creating new project:'} [green]{project_path.name}[/green]"
+        "[bold cyan]Specify 專案設定[/bold cyan]\n"
+        f"{'在目前目錄初始化：' if here else '建立新專案：'} [green]{project_path.name}[/green]"
         + (f"\n[dim]Path: {project_path}[/dim]" if here else ""),
         border_style="cyan"
     ))
@@ -710,19 +710,19 @@ def init(
     if not no_git:
         git_available = check_tool("git", "https://git-scm.com/downloads")
         if not git_available:
-            console.print("[yellow]Git not found - will skip repository initialization[/yellow]")
+            console.print("[yellow]找不到 Git - 將跳過儲存庫初始化[/yellow]")
 
     # AI assistant selection
     if ai_assistant:
         if ai_assistant not in AI_CHOICES:
-            console.print(f"[red]Error:[/red] Invalid AI assistant '{ai_assistant}'. Choose from: {', '.join(AI_CHOICES.keys())}")
+            console.print(f"[red]錯誤：[/red] 無效的 AI 助理 '{ai_assistant}'。請從以下選擇：{', '.join(AI_CHOICES.keys())}")
             raise typer.Exit(1)
         selected_ai = ai_assistant
     else:
         # Use arrow-key selection interface
         selected_ai = select_with_arrows(
             AI_CHOICES, 
-            "Choose your AI assistant:", 
+            "選擇你的 AI 助理：", 
             "copilot"
         )
     

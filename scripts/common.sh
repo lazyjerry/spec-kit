@@ -1,38 +1,38 @@
 #!/bin/bash
-# Common functions and variables for all scripts
+# 所有腳本的共用函式和變數
 
-# Get repository root
+# 取得儲存庫根目錄
 get_repo_root() {
     git rev-parse --show-toplevel
 }
 
-# Get current branch
+# 取得目前分支
 get_current_branch() {
     git rev-parse --abbrev-ref HEAD
 }
 
-# Check if current branch is a feature branch
-# Returns 0 if valid, 1 if not
+# 檢查目前分支是否為功能分支
+# 有效時回傳 0，無效時回傳 1
 check_feature_branch() {
     local branch="$1"
     if [[ ! "$branch" =~ ^[0-9]{3}- ]]; then
-        echo "ERROR: Not on a feature branch. Current branch: $branch"
-        echo "Feature branches should be named like: 001-feature-name"
+        echo "錯誤：不在功能分支上。目前分支：$branch"
+        echo "功能分支應該命名為：001-feature-name"
         return 1
     fi
     return 0
 }
 
-# Get feature directory path
+# 取得功能目錄路徑
 get_feature_dir() {
     local repo_root="$1"
     local branch="$2"
     echo "$repo_root/specs/$branch"
 }
 
-# Get all standard paths for a feature
-# Usage: eval $(get_feature_paths)
-# Sets: REPO_ROOT, CURRENT_BRANCH, FEATURE_DIR, FEATURE_SPEC, IMPL_PLAN, TASKS
+# 取得功能的所有標準路徑
+# 用法：eval $(get_feature_paths)
+# 設定：REPO_ROOT, CURRENT_BRANCH, FEATURE_DIR, FEATURE_SPEC, IMPL_PLAN, TASKS
 get_feature_paths() {
     local repo_root=$(get_repo_root)
     local current_branch=$(get_current_branch)
@@ -50,7 +50,7 @@ get_feature_paths() {
     echo "CONTRACTS_DIR='$feature_dir/contracts'"
 }
 
-# Check if a file exists and report
+# 檢查檔案是否存在並回報
 check_file() {
     local file="$1"
     local description="$2"
@@ -63,7 +63,7 @@ check_file() {
     fi
 }
 
-# Check if a directory exists and has files
+# 檢查目錄是否存在且包含檔案
 check_dir() {
     local dir="$1"
     local description="$2"

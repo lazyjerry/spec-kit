@@ -1,7 +1,7 @@
 #!/bin/bash
-# Incrementally update agent context files based on new feature plan
-# Supports: CLAUDE.md, GEMINI.md, and .github/copilot-instructions.md
-# O(1) operation - only reads current context file and new plan.md
+# 根據新功能計畫逐步更新代理程式上下文檔案
+# 支援：CLAUDE.md、GEMINI.md 和 .github/copilot-instructions.md
+# O(1) 操作 - 僅讀取目前上下文檔案和新的 plan.md
 
 set -e
 
@@ -10,63 +10,63 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 FEATURE_DIR="$REPO_ROOT/specs/$CURRENT_BRANCH"
 NEW_PLAN="$FEATURE_DIR/plan.md"
 
-# Determine which agent context files to update
+# 決定要更新哪些代理程式上下文檔案
 CLAUDE_FILE="$REPO_ROOT/CLAUDE.md"
 GEMINI_FILE="$REPO_ROOT/GEMINI.md"
 COPILOT_FILE="$REPO_ROOT/.github/copilot-instructions.md"
 
-# Allow override via argument
+# 允許透過參數覆寫
 AGENT_TYPE="$1"
 
 if [ ! -f "$NEW_PLAN" ]; then
-    echo "ERROR: No plan.md found at $NEW_PLAN"
+    echo "錯誤：在 $NEW_PLAN 找不到 plan.md"
     exit 1
 fi
 
-echo "=== Updating agent context files for feature $CURRENT_BRANCH ==="
+echo "=== 為功能 $CURRENT_BRANCH 更新代理程式上下文檔案 ==="
 
-# Extract tech from new plan
+# 從新計畫中提取技術資訊
 NEW_LANG=$(grep "^**Language/Version**: " "$NEW_PLAN" 2>/dev/null | head -1 | sed 's/^**Language\/Version**: //' | grep -v "NEEDS CLARIFICATION" || echo "")
 NEW_FRAMEWORK=$(grep "^**Primary Dependencies**: " "$NEW_PLAN" 2>/dev/null | head -1 | sed 's/^**Primary Dependencies**: //' | grep -v "NEEDS CLARIFICATION" || echo "")
 NEW_TESTING=$(grep "^**Testing**: " "$NEW_PLAN" 2>/dev/null | head -1 | sed 's/^**Testing**: //' | grep -v "NEEDS CLARIFICATION" || echo "")
 NEW_DB=$(grep "^**Storage**: " "$NEW_PLAN" 2>/dev/null | head -1 | sed 's/^**Storage**: //' | grep -v "N/A" | grep -v "NEEDS CLARIFICATION" || echo "")
 NEW_PROJECT_TYPE=$(grep "^**Project Type**: " "$NEW_PLAN" 2>/dev/null | head -1 | sed 's/^**Project Type**: //' || echo "")
 
-# Function to update a single agent context file
+# 更新單一代理程式上下文檔案的函式
 update_agent_file() {
     local target_file="$1"
     local agent_name="$2"
     
-    echo "Updating $agent_name context file: $target_file"
+    echo "正在更新 $agent_name 上下文檔案：$target_file"
     
-    # Create temp file for new context
+    # 為新上下文建立暫存檔案
     local temp_file=$(mktemp)
     
-    # If file doesn't exist, create from template
+    # 如果檔案不存在，從範本建立
     if [ ! -f "$target_file" ]; then
-        echo "Creating new $agent_name context file..."
+        echo "正在建立新的 $agent_name 上下文檔案..."
         
-        # Check if this is the SDD repo itself
+        # 檢查這是否為 SDD 儲存庫本身
         if [ -f "$REPO_ROOT/templates/agent-file-template.md" ]; then
             cp "$REPO_ROOT/templates/agent-file-template.md" "$temp_file"
         else
-            echo "ERROR: Template not found at $REPO_ROOT/templates/agent-file-template.md"
+            echo "錯誤：在 $REPO_ROOT/templates/agent-file-template.md 找不到範本"
             return 1
         fi
         
-        # Replace placeholders
+        # 替換佔位符
         sed -i.bak "s/\[PROJECT NAME\]/$(basename $REPO_ROOT)/" "$temp_file"
         sed -i.bak "s/\[DATE\]/$(date +%Y-%m-%d)/" "$temp_file"
         sed -i.bak "s/\[EXTRACTED FROM ALL PLAN.MD FILES\]/- $NEW_LANG + $NEW_FRAMEWORK ($CURRENT_BRANCH)/" "$temp_file"
         
-        # Add project structure based on type
+        # 根據類型新增專案結構
         if [[ "$NEW_PROJECT_TYPE" == *"web"* ]]; then
             sed -i.bak "s|\[ACTUAL STRUCTURE FROM PLANS\]|backend/\nfrontend/\ntests/|" "$temp_file"
         else
             sed -i.bak "s|\[ACTUAL STRUCTURE FROM PLANS\]|src/\ntests/|" "$temp_file"
         fi
         
-        # Add minimal commands
+        # 新增最小指令集
         if [[ "$NEW_LANG" == *"Python"* ]]; then
             COMMANDS="cd src && pytest && ruff check ."
         elif [[ "$NEW_LANG" == *"Rust"* ]]; then
@@ -78,17 +78,17 @@ update_agent_file() {
         fi
         sed -i.bak "s|\[ONLY COMMANDS FOR ACTIVE TECHNOLOGIES\]|$COMMANDS|" "$temp_file"
         
-        # Add code style
+        # 新增程式碼風格
         sed -i.bak "s|\[LANGUAGE-SPECIFIC, ONLY FOR LANGUAGES IN USE\]|$NEW_LANG: Follow standard conventions|" "$temp_file"
         
-        # Add recent changes
+        # 新增最近變更
         sed -i.bak "s|\[LAST 3 FEATURES AND WHAT THEY ADDED\]|- $CURRENT_BRANCH: Added $NEW_LANG + $NEW_FRAMEWORK|" "$temp_file"
         
         rm "$temp_file.bak"
     else
-        echo "Updating existing $agent_name context file..."
+        echo "正在更新現有的 $agent_name 上下文檔案..."
         
-        # Extract manual additions
+        # 提取手動新增的內容
         local manual_start=$(grep -n "<!-- MANUAL ADDITIONS START -->" "$target_file" | cut -d: -f1)
         local manual_end=$(grep -n "<!-- MANUAL ADDITIONS END -->" "$target_file" | cut -d: -f1)
         
@@ -96,7 +96,7 @@ update_agent_file() {
             sed -n "${manual_start},${manual_end}p" "$target_file" > /tmp/manual_additions.txt
         fi
         
-        # Parse existing file and create updated version
+        # 解析現有檔案並建立更新版本
         python3 - << EOF
 import re
 import sys
@@ -171,22 +171,22 @@ with open("$temp_file", 'w') as f:
     f.write(content)
 EOF
 
-        # Restore manual additions if they exist
+        # 如果手動新增的內容存在則還原
         if [ -f /tmp/manual_additions.txt ]; then
-            # Remove old manual section from temp file
+            # 從暫存檔案中移除舊的手動區段
             sed -i.bak '/<!-- MANUAL ADDITIONS START -->/,/<!-- MANUAL ADDITIONS END -->/d' "$temp_file"
-            # Append manual additions
+            # 附加手動新增的內容
             cat /tmp/manual_additions.txt >> "$temp_file"
             rm /tmp/manual_additions.txt "$temp_file.bak"
         fi
     fi
     
-    # Move temp file to final location
+    # 將暫存檔案移動到最終位置
     mv "$temp_file" "$target_file"
-    echo "✅ $agent_name context file updated successfully"
+    echo "✅ $agent_name 上下文檔案更新成功"
 }
 
-# Update files based on argument or detect existing files
+# 根據參數更新檔案或偵測現有檔案
 case "$AGENT_TYPE" in
     "claude")
         update_agent_file "$CLAUDE_FILE" "Claude Code"
@@ -198,37 +198,37 @@ case "$AGENT_TYPE" in
         update_agent_file "$COPILOT_FILE" "GitHub Copilot"
         ;;
     "")
-        # Update all existing files
+        # 更新所有現有檔案
         [ -f "$CLAUDE_FILE" ] && update_agent_file "$CLAUDE_FILE" "Claude Code"
         [ -f "$GEMINI_FILE" ] && update_agent_file "$GEMINI_FILE" "Gemini CLI" 
         [ -f "$COPILOT_FILE" ] && update_agent_file "$COPILOT_FILE" "GitHub Copilot"
         
-        # If no files exist, create based on current directory or ask user
+        # 如果沒有檔案存在，根據目前目錄建立或詢問使用者
         if [ ! -f "$CLAUDE_FILE" ] && [ ! -f "$GEMINI_FILE" ] && [ ! -f "$COPILOT_FILE" ]; then
-            echo "No agent context files found. Creating Claude Code context file by default."
+            echo "找不到代理程式上下文檔案。預設建立 Claude Code 上下文檔案。"
             update_agent_file "$CLAUDE_FILE" "Claude Code"
         fi
         ;;
     *)
-        echo "ERROR: Unknown agent type '$AGENT_TYPE'. Use: claude, gemini, copilot, or leave empty for all."
+        echo "錯誤：未知的代理程式類型 '$AGENT_TYPE'。請使用：claude、gemini、copilot，或留空以更新全部。"
         exit 1
         ;;
 esac
 echo ""
-echo "Summary of changes:"
+echo "變更摘要："
 if [ ! -z "$NEW_LANG" ]; then
-    echo "- Added language: $NEW_LANG"
+    echo "- 新增語言：$NEW_LANG"
 fi
 if [ ! -z "$NEW_FRAMEWORK" ]; then
-    echo "- Added framework: $NEW_FRAMEWORK"
+    echo "- 新增框架：$NEW_FRAMEWORK"
 fi
 if [ ! -z "$NEW_DB" ] && [ "$NEW_DB" != "N/A" ]; then
-    echo "- Added database: $NEW_DB"
+    echo "- 新增資料庫：$NEW_DB"
 fi
 
 echo ""
-echo "Usage: $0 [claude|gemini|copilot]"
-echo "  - No argument: Update all existing agent context files"
-echo "  - claude: Update only CLAUDE.md"
-echo "  - gemini: Update only GEMINI.md" 
-echo "  - copilot: Update only .github/copilot-instructions.md"
+echo "用法：$0 [claude|gemini|copilot]"
+echo "  - 無參數：更新所有現有的代理程式上下文檔案"
+echo "  - claude：僅更新 CLAUDE.md"
+echo "  - gemini：僅更新 GEMINI.md" 
+echo "  - copilot：僅更新 .github/copilot-instructions.md"

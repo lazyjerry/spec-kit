@@ -1,85 +1,97 @@
-# Constitution Update Checklist
+# 憲章更新檢查清單
 
-When amending the constitution (`/memory/constitution.md`), ensure all dependent documents are updated to maintain consistency.
+修改憲章（`/memory/constitution.md`）時，請確保所有相依文件都已更新以維持一致性。
 
-## Templates to Update
+## 需要更新的範本
 
-### When adding/modifying ANY article:
-- [ ] `/templates/plan-template.md` - Update Constitution Check section
-- [ ] `/templates/spec-template.md` - Update if requirements/scope affected
-- [ ] `/templates/tasks-template.md` - Update if new task types needed
-- [ ] `/.claude/commands/plan.md` - Update if planning process changes
-- [ ] `/.claude/commands/tasks.md` - Update if task generation affected
-- [ ] `/CLAUDE.md` - Update runtime development guidelines
+### 新增/修改任何條文時：
 
-### Article-specific updates:
+- [ ] `/templates/plan-template.md` - 更新憲章檢查區段
+- [ ] `/templates/spec-template.md` - 如果需求/範圍受影響則更新
+- [ ] `/templates/tasks-template.md` - 如果需要新任務類型則更新
+- [ ] `/.claude/commands/plan.md` - 如果規劃流程變更則更新
+- [ ] `/.claude/commands/tasks.md` - 如果任務產生受影響則更新
+- [ ] `/CLAUDE.md` - 更新執行時期開發指導原則
 
-#### Article I (Library-First):
-- [ ] Ensure templates emphasize library creation
-- [ ] Update CLI command examples
-- [ ] Add llms.txt documentation requirements
+### 條文特定更新：
 
-#### Article II (CLI Interface):
-- [ ] Update CLI flag requirements in templates
-- [ ] Add text I/O protocol reminders
+#### 第一條（函式庫優先）：
 
-#### Article III (Test-First):
-- [ ] Update test order in all templates
-- [ ] Emphasize TDD requirements
-- [ ] Add test approval gates
+- [ ] 確保範本強調函式庫建立
+- [ ] 更新 CLI 指令範例
+- [ ] 新增 llms.txt 文件需求
 
-#### Article IV (Integration Testing):
-- [ ] List integration test triggers
-- [ ] Update test type priorities
-- [ ] Add real dependency requirements
+#### 第二條（CLI 介面）：
 
-#### Article V (Observability):
-- [ ] Add logging requirements to templates
-- [ ] Include multi-tier log streaming
-- [ ] Update performance monitoring sections
+- [ ] 更新範本中的 CLI 旗標需求
+- [ ] 新增文字 I/O 協定提醒
 
-#### Article VI (Versioning):
-- [ ] Add version increment reminders
-- [ ] Include breaking change procedures
-- [ ] Update migration requirements
+#### 第三條（測試優先）：
 
-#### Article VII (Simplicity):
-- [ ] Update project count limits
-- [ ] Add pattern prohibition examples
-- [ ] Include YAGNI reminders
+- [ ] 更新所有範本中的測試順序
+- [ ] 強調 TDD 需求
+- [ ] 新增測試核准關卡
 
-## Validation Steps
+#### 第四條（整合測試）：
 
-1. **Before committing constitution changes:**
-   - [ ] All templates reference new requirements
-   - [ ] Examples updated to match new rules
-   - [ ] No contradictions between documents
+- [ ] 列出整合測試觸發條件
+- [ ] 更新測試類型優先順序
+- [ ] 新增真實相依性需求
 
-2. **After updating templates:**
-   - [ ] Run through a sample implementation plan
-   - [ ] Verify all constitution requirements addressed
-   - [ ] Check that templates are self-contained (readable without constitution)
+#### 第五條（可觀測性）：
 
-3. **Version tracking:**
-   - [ ] Update constitution version number
-   - [ ] Note version in template footers
-   - [ ] Add amendment to constitution history
+- [ ] 在範本中新增日誌需求
+- [ ] 包含多層日誌串流
+- [ ] 更新效能監控區段
 
-## Common Misses
+#### 第六條（版本控制）：
 
-Watch for these often-forgotten updates:
-- Command documentation (`/commands/*.md`)
-- Checklist items in templates
-- Example code/commands
-- Domain-specific variations (web vs mobile vs CLI)
-- Cross-references between documents
+- [ ] 新增版本遞增提醒
+- [ ] 包含重大變更程序
+- [ ] 更新遷移需求
 
-## Template Sync Status
+#### 第七條（簡潔性）：
 
-Last sync check: 2025-07-16
-- Constitution version: 2.1.1
-- Templates aligned: ❌ (missing versioning, observability details)
+- [ ] 更新專案數量限制
+- [ ] 新增模式禁用範例
+- [ ] 包含 YAGNI 提醒
+
+## 驗證步驟
+
+1. **提交憲章變更前：**
+
+   - [ ] 所有範本都參考新需求
+   - [ ] 範例已更新以符合新規則
+   - [ ] 文件間無矛盾
+
+2. **更新範本後：**
+
+   - [ ] 執行範例實作計畫
+   - [ ] 驗證所有憲章需求都已處理
+   - [ ] 檢查範本是否自包含（無需憲章即可閱讀）
+
+3. **版本追蹤：**
+   - [ ] 更新憲章版本號
+   - [ ] 在範本頁尾註記版本
+   - [ ] 將修正案新增至憲章歷史
+
+## 常見遺漏
+
+注意這些經常被遺忘的更新：
+
+- 指令文件（`/commands/*.md`）
+- 範本中的檢查清單項目
+- 範例程式碼/指令
+- 領域特定變化（web vs mobile vs CLI）
+- 文件間的交叉參考
+
+## 範本同步狀態
+
+最後同步檢查：2025-07-16
+
+- 憲章版本：2.1.1
+- 範本對齊：❌（缺少版本控制、可觀測性詳細資訊）
 
 ---
 
-*This checklist ensures the constitution's principles are consistently applied across all project documentation.*
+_此檢查清單確保憲章原則在所有專案文件中一致應用。_
