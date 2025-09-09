@@ -1,63 +1,69 @@
 ---
 name: tasks
-description: "Break down the plan into executable tasks. This is the third step in the Spec-Driven Development lifecycle."
+description: "將計畫分解為可執行的任務。這是規格驅動開發生命週期的第三步。"
 ---
 
-Break down the plan into executable tasks.
+將計畫分解為可執行的任務。
 
-This is the third step in the Spec-Driven Development lifecycle.
+這是規格驅動開發生命週期的第三步。
 
-Given the context provided as an argument, do this:
+根據作為參數提供的背景，執行以下操作：
 
-1. Run `scripts/check-task-prerequisites.sh --json` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute.
-2. Load and analyze available design documents:
-   - Always read plan.md for tech stack and libraries
-   - IF EXISTS: Read data-model.md for entities
-   - IF EXISTS: Read contracts/ for API endpoints  
-   - IF EXISTS: Read research.md for technical decisions
-   - IF EXISTS: Read quickstart.md for test scenarios
-   
-   Note: Not all projects have all documents. For example:
-   - CLI tools might not have contracts/
-   - Simple libraries might not need data-model.md
-   - Generate tasks based on what's available
+1. 從儲存庫根目錄執行 `scripts/check-task-prerequisites.sh --json` 並解析 FEATURE_DIR 和 AVAILABLE_DOCS 清單。所有路徑都必須是絕對路徑。
+2. 載入並分析可用的設計文件：
 
-3. Generate tasks following the template:
-   - Use `/templates/tasks-template.md` as the base
-   - Replace example tasks with actual tasks based on:
-     * **Setup tasks**: Project init, dependencies, linting
-     * **Test tasks [P]**: One per contract, one per integration scenario
-     * **Core tasks**: One per entity, service, CLI command, endpoint
-     * **Integration tasks**: DB connections, middleware, logging
-     * **Polish tasks [P]**: Unit tests, performance, docs
+   - 始終讀取 plan.md 以取得技術堆疊和函式庫
+   - 如果存在：讀取 data-model.md 以取得實體
+   - 如果存在：讀取 contracts/ 以取得 API 端點
+   - 如果存在：讀取 research.md 以取得技術決策
+   - 如果存在：讀取 quickstart.md 以取得測試情境
 
-4. Task generation rules:
-   - Each contract file → contract test task marked [P]
-   - Each entity in data-model → model creation task marked [P]
-   - Each endpoint → implementation task (not parallel if shared files)
-   - Each user story → integration test marked [P]
-   - Different files = can be parallel [P]
-   - Same file = sequential (no [P])
+   注意：並非所有專案都有所有文件。例如：
 
-5. Order tasks by dependencies:
-   - Setup before everything
-   - Tests before implementation (TDD)
-   - Models before services
-   - Services before endpoints
-   - Core before integration
-   - Everything before polish
+   - CLI 工具可能沒有 contracts/
+   - 簡單的函式庫可能不需要 data-model.md
+   - 根據可用的內容產生任務
 
-6. Include parallel execution examples:
-   - Group [P] tasks that can run together
-   - Show actual Task agent commands
+3. 遵循範本產生任務：
 
-7. Create FEATURE_DIR/tasks.md with:
-   - Correct feature name from implementation plan
-   - Numbered tasks (T001, T002, etc.)
-   - Clear file paths for each task
-   - Dependency notes
-   - Parallel execution guidance
+   - 使用 `/templates/tasks-template.md` 作為基礎
+   - 根據以下內容將範例任務替換為實際任務：
+     - **設定任務**：專案初始化、相依性、程式碼檢查
+     - **測試任務 [P]**：每個合約一個、每個整合情境一個
+     - **核心任務**：每個實體、服務、CLI 指令、端點一個
+     - **整合任務**：資料庫連線、中介軟體、日誌記錄
+     - **完善任務 [P]**：單元測試、效能、文件
 
-Context for task generation: {ARGS}
+4. 任務產生規則：
 
-The tasks.md should be immediately executable - each task must be specific enough that an LLM can complete it without additional context.
+   - 每個合約檔案 → 標記為 [P] 的合約測試任務
+   - data-model 中的每個實體 → 標記為 [P] 的模型建立任務
+   - 每個端點 → 實作任務（如果共享檔案則不平行）
+   - 每個使用者故事 → 標記為 [P] 的整合測試
+   - 不同檔案 = 可以平行 [P]
+   - 相同檔案 = 循序（無 [P]）
+
+5. 按相依性排序任務：
+
+   - 設定在所有任務之前
+   - 測試在實作之前（TDD）
+   - 模型在服務之前
+   - 服務在端點之前
+   - 核心在整合之前
+   - 所有任務在完善之前
+
+6. 包含平行執行範例：
+
+   - 將可以一起執行的 [P] 任務分組
+   - 顯示實際的 Task 代理程式指令
+
+7. 建立 FEATURE_DIR/tasks.md，包含：
+   - 來自實作計畫的正確功能名稱
+   - 編號任務（T001、T002 等）
+   - 每個任務的清楚檔案路徑
+   - 相依性註記
+   - 平行執行指導
+
+任務產生的背景：{ARGS}
+
+tasks.md 應該可以立即執行 - 每個任務都必須足夠具體，讓 LLM 可以在沒有額外背景的情況下完成它。

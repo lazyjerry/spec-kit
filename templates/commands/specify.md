@@ -1,17 +1,17 @@
 ---
 name: specify
-description: "Start a new feature by creating a specification and feature branch. This is the first step in the Spec-Driven Development lifecycle."
+description: "透過建立規格和功能分支來開始新功能。這是規格驅動開發生命週期的第一步。"
 ---
 
-Start a new feature by creating a specification and feature branch.
+透過建立規格和功能分支來開始新功能。
 
-This is the first step in the Spec-Driven Development lifecycle.
+這是規格驅動開發生命週期的第一步。
 
-Given the feature description provided as an argument, do this:
+根據作為參數提供的功能描述，執行以下操作：
 
-1. Run the script `scripts/create-new-feature.sh --json "{ARGS}"` from repo root and parse its JSON output for BRANCH_NAME and SPEC_FILE. All file paths must be absolute.
-2. Load `templates/spec-template.md` to understand required sections.
-3. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
-4. Report completion with branch name, spec file path, and readiness for the next phase.
+1. 從儲存庫根目錄執行腳本 `scripts/create-new-feature.sh --json "{ARGS}"` 並解析其 JSON 輸出以取得 BRANCH_NAME 和 SPEC_FILE。所有檔案路徑都必須是絕對路徑。
+2. 載入 `templates/spec-template.md` 以了解必需的章節。
+3. 使用範本結構將規格寫入 SPEC_FILE，用從功能描述（參數）衍生的具體細節替換佔位符，同時保持章節順序和標題。
+4. 回報完成狀況，包含分支名稱、規格檔案路徑，以及準備進入下一階段的狀態。
 
-Note: The script creates and checks out the new branch and initializes the spec file before writing.
+注意：腳本會在寫入之前建立並切換到新分支，並初始化規格檔案。

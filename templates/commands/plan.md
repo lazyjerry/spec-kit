@@ -1,41 +1,44 @@
 ---
 name: plan
-description: "Plan how to implement the specified feature. This is the second step in the Spec-Driven Development lifecycle."
+description: "規劃如何實作指定的功能。這是規格驅動開發生命週期的第二步。"
 ---
 
-Plan how to implement the specified feature.
+規劃如何實作指定的功能。
 
-This is the second step in the Spec-Driven Development lifecycle.
+這是規格驅動開發生命週期的第二步。
 
-Given the implementation details provided as an argument, do this:
+根據作為參數提供的實作細節，執行以下操作：
 
-1. Run `scripts/setup-plan.sh --json` from the repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. All future file paths must be absolute.
-2. Read and analyze the feature specification to understand:
-   - The feature requirements and user stories
-   - Functional and non-functional requirements
-   - Success criteria and acceptance criteria
-   - Any technical constraints or dependencies mentioned
+1. 從儲存庫根目錄執行 `scripts/setup-plan.sh --json` 並解析 JSON 以取得 FEATURE_SPEC、IMPL_PLAN、SPECS_DIR、BRANCH。所有未來的檔案路徑都必須是絕對路徑。
+2. 讀取並分析功能規格以了解：
 
-3. Read the constitution at `/memory/constitution.md` to understand constitutional requirements.
+   - 功能需求和使用者故事
+   - 功能性和非功能性需求
+   - 成功標準和接受標準
+   - 任何提及的技術限制或相依性
 
-4. Execute the implementation plan template:
-   - Load `/templates/plan-template.md` (already copied to IMPL_PLAN path)
-   - Set Input path to FEATURE_SPEC
-   - Run the Execution Flow (main) function steps 1-10
-   - The template is self-contained and executable
-   - Follow error handling and gate checks as specified
-   - Let the template guide artifact generation in $SPECS_DIR:
-     * Phase 0 generates research.md
-     * Phase 1 generates data-model.md, contracts/, quickstart.md
-     * Phase 2 generates tasks.md
-   - Incorporate user-provided details from arguments into Technical Context: {ARGS}
-   - Update Progress Tracking as you complete each phase
+3. 讀取位於 `/memory/constitution.md` 的憲法以了解憲法要求。
 
-5. Verify execution completed:
-   - Check Progress Tracking shows all phases complete
-   - Ensure all required artifacts were generated
-   - Confirm no ERROR states in execution
+4. 執行實作計畫範本：
 
-6. Report results with branch name, file paths, and generated artifacts.
+   - 載入 `/templates/plan-template.md`（已複製到 IMPL_PLAN 路徑）
+   - 將輸入路徑設定為 FEATURE_SPEC
+   - 執行執行流程（main）函式步驟 1-10
+   - 範本是自包含且可執行的
+   - 遵循指定的錯誤處理和閘門檢查
+   - 讓範本引導在 $SPECS_DIR 中產生工件：
+     - 階段 0 產生 research.md
+     - 階段 1 產生 data-model.md、contracts/、quickstart.md
+     - 階段 2 產生 tasks.md
+   - 將使用者提供的參數細節納入技術背景：{ARGS}
+   - 在完成每個階段時更新進度追蹤
 
-Use absolute paths with the repository root for all file operations to avoid path issues.
+5. 驗證執行完成：
+
+   - 檢查進度追蹤顯示所有階段完成
+   - 確保所有必需的工件都已產生
+   - 確認執行中沒有錯誤狀態
+
+6. 回報結果，包含分支名稱、檔案路徑和產生的工件。
+
+對所有檔案操作使用儲存庫根目錄的絕對路徑以避免路徑問題。
