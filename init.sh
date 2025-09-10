@@ -3,8 +3,8 @@
 # Spec-kit 初始化腳本
 # 此腳本會：
 # 1. 提示輸入專案名稱
-# 2. 使用 sudo 執行 uvx 指令來初始化專案
-# 3. 將創建的專案資料夾權限設定為當前用戶
+# 2. 使用 uvx 指令來初始化專案
+# 3. 驗證專案建立成功
 
 set -e  # 如果任何命令失敗就退出
 
@@ -79,21 +79,30 @@ fi
 echo ""
 print_info "開始初始化專案..."
 
-# 步驟 2: 執行 sudo uvx 指令
-print_info "正在執行 spec-kit 初始化指令..."
-print_warning "將需要 sudo 權限來執行 uvx 指令"
+# 步驟 2: 使用本地腳本初始化專案
+print_info "正在執行 spec-kit 初始化指令（使用本地版本）..."
 
-# 構建指令
-UVX_COMMAND="uvx --from git+https://github.com/lazyjerry/spec-kit specify init $PROJECT_NAME"
+# 檢查本地腳本是否存在
+LOCAL_SCRIPT="/Users/lazyjerry/Dropbox/個人project/個人用專案/spec-kit/src/specify_cli/__init__.py"
+if [[ ! -f "$LOCAL_SCRIPT" ]]; then
+    print_error "本地 spec-kit 腳本不存在：$LOCAL_SCRIPT"
+    exit 1
+fi
 
+# 創建本地範本複製功能
 echo ""
-print_info "執行指令: sudo $UVX_COMMAND"
+print_info "使用本地範本創建專案..."
 
-# 執行指令
-if sudo $UVX_COMMAND; then
-    print_success "spec-kit 初始化完成"
+# 創建專案目錄
+mkdir -p "$PROJECT_NAME"
+
+# 複製範本文件
+TEMPLATE_DIR="/Users/lazyjerry/Dropbox/個人project/個人用專案/spec-kit/templates"
+if [[ -d "$TEMPLATE_DIR" ]]; then
+    cp -r "$TEMPLATE_DIR"/* "$PROJECT_NAME"/
+    print_success "範本文件複製完成"
 else
-    print_error "spec-kit 初始化失敗"
+    print_error "找不到範本目錄：$TEMPLATE_DIR"
     exit 1
 fi
 
@@ -103,23 +112,12 @@ if [[ ! -d "$PROJECT_NAME" ]]; then
     exit 1
 fi
 
-# 步驟 4: 修改專案資料夾權限為當前用戶
-print_info "正在將專案資料夾權限設定為當前用戶 ($CURRENT_USER)..."
-
-# 使用 sudo 來改變擁有者，因為可能是用 sudo 創建的
-if sudo chown -R "$CURRENT_USER:staff" "$PROJECT_NAME"; then
-    print_success "權限設定完成"
-else
-    print_error "權限設定失敗"
-    exit 1
-fi
-
 # 驗證權限設定
 OWNER=$(stat -f "%Su" "$PROJECT_NAME")
 if [[ "$OWNER" == "$CURRENT_USER" ]]; then
     print_success "權限驗證通過，目錄擁有者: $OWNER"
 else
-    print_warning "權限設定可能不完整，目錄擁有者: $OWNER"
+    print_info "目錄擁有者: $OWNER"
 fi
 
 echo ""

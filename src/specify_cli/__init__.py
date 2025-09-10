@@ -64,7 +64,7 @@ BANNER = """
 ╚══════╝╚═╝     ╚══════╝ ╚═════╝╚═╝╚═╝        ╚═╝   
 """
 
-TAGLINE = "規格驅動開發工具包"
+TAGLINE = "規格驅動開發工具包 Jerry 改"
 class StepTracker:
     """追蹤並渲染階層式步驟，不使用表情符號，類似 Claude Code 樹狀輸出。
     透過附加的重新整理回呼支援即時自動重新整理。
@@ -642,6 +642,7 @@ def init(
     ignore_agent_tools: bool = typer.Option(False, "--ignore-agent-tools", help="跳過 AI 代理工具 (如 Claude Code) 的檢查"),
     no_git: bool = typer.Option(False, "--no-git", help="跳過 git 儲存庫初始化"),
     here: bool = typer.Option(False, "--here", help="在目前目錄初始化專案，而非建立新目錄"),
+    non_interactive: bool = typer.Option(False, "--non-interactive", "-n", help="非互動式模式，使用預設選項"),
 ):
     """
     從最新範本初始化新的 Specify 專案。
@@ -718,6 +719,10 @@ def init(
             console.print(f"[red]錯誤：[/red] 無效的 AI 助理 '{ai_assistant}'。請從以下選擇：{', '.join(AI_CHOICES.keys())}")
             raise typer.Exit(1)
         selected_ai = ai_assistant
+    elif non_interactive:
+        # 非互動式模式使用預設選項
+        selected_ai = "copilot"
+        console.print(f"[yellow]非互動式模式：使用預設 AI 助理 - {AI_CHOICES[selected_ai]}[/yellow]")
     else:
         # 使用方向鍵選擇介面
         selected_ai = select_with_arrows(
