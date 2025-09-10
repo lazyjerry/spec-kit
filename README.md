@@ -1,3 +1,7 @@
+<p align="center">
+    <em>Jerry 客製化版本</em>
+</p>
+
 <div align="center">
     <img src="./media/logo_small.webp"/>
     <h1>🌱 Spec Kit</h1>
