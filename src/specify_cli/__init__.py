@@ -185,7 +185,7 @@ def get_key():
 
 
 
-def select_with_arrows(options: dict, prompt_text: str = "選擇一個選項", default_key: str = None) -> str:
+def select_with_arrows(options: dict, prompt_text: str = "選擇一個選項", default_key: str | None = None) -> str:
     """
     使用方向鍵與 Rich Live 顯示進行互動式選擇。
     
@@ -340,7 +340,7 @@ def check_tool(tool: str, install_hint: str) -> bool:
         return False
 
 
-def is_git_repo(path: Path = None) -> bool:
+def is_git_repo(path: Path | None = None) -> bool:
     """檢查指定路徑是否在 git 儲存庫內。"""
     if path is None:
         path = Path.cwd()
@@ -365,8 +365,8 @@ def init_git_repo(project_path: Path, quiet: bool = False) -> bool:
     """在指定路徑初始化 git 儲存庫。
     quiet: 如果為 True 則抑制控制台輸出 (追蹤器處理狀態)
     """
+    original_cwd = Path.cwd()
     try:
-        original_cwd = Path.cwd()
         os.chdir(project_path)
         if not quiet:
             console.print("[cyan]正在初始化 git 儲存庫...[/cyan]")
@@ -389,7 +389,7 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, verb
     """使用 HTTP 請求從 GitHub 下載最新的範本發布版本。
     回傳 (zip_path, metadata_dict)
     """
-    repo_owner = "github"
+    repo_owner = "lazyjerry"
     repo_name = "spec-kit"
     
     if verbose:
@@ -748,7 +748,7 @@ def init(
     # 新的樹狀進度 (無表情符號)；包含較早的子步驟
     tracker = StepTracker("初始化 Specify 專案")
     # 允許抑制舊版標題的旗標
-    sys._specify_tracker_active = True
+    # sys._specify_tracker_active = True  # 註解掉，因為這不是標準屬性
     # 在即時渲染前記錄為已完成的預先步驟
     tracker.add("precheck", "檢查必要工具")
     tracker.complete("precheck", "ok")
